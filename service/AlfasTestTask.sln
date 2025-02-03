@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlfasTestTask", "src\AlfasTestTask.csproj", "{93C8E11E-F152-489E-85B4-4FA1A8C0856A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{646D9FB2-F4A5-463F-9DAB-3D9AA5C4FE80}"
+	ProjectSection(SolutionItems) = preProject
+		..\docker-compose.yml = ..\docker-compose.yml
+		..\init.sql = ..\init.sql
+		..\README.md = ..\README.md
+		Dockerfile = Dockerfile
+		..\users.xml = ..\users.xml
+		..\.gitignore = ..\.gitignore
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{93C8E11E-F152-489E-85B4-4FA1A8C0856A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93C8E11E-F152-489E-85B4-4FA1A8C0856A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93C8E11E-F152-489E-85B4-4FA1A8C0856A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93C8E11E-F152-489E-85B4-4FA1A8C0856A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

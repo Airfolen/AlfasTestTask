@@ -1,0 +1,89 @@
+name: prime-generator-service
+services:
+  kafka:
+    image: bitnami/kafka:latest
+    ports:
+     - "9092:9092"
+     - "9093:9093"
+     - "29092:29092"
+    environment:
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,PLAINTEXT_EXTERNAL://:29092,CONTROLLER://:9093
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,PLAINTEXT_EXTERNAL://localhost:29092
+      - KAFKA_CFG_BROKER_ID=1
+      - KAFKA_CFG_NODE_ID=1
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_KRAFT_CLUSTER_ID=OTMwNzFhYTY1ODNiNGE5OT
+    volumes:
+      - kafka_data:/bitnami/kafka
+
+  kafka-init:
+    image: bitnami/kafka:latest
+    container_name: kafka-init
+    depends_on:
+      - kafka
+    entrypoint: ["/bin/sh", "-c"]
+    command: |
+      "
+      kafka-topics.sh --create --topic primes --bootstrap-server kafka:9092 --partitions 1 --replication-factor 1
+      kafka-topics.sh --list --bootstrap-server kafka:9092
+      "
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    restart: always
+    depends_on:
+      - kafka
+    ports:
+      - "8080:8080"  # UI для Kafka
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS=kafka:9092
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    container_name: clickhouse
+    restart: always
+    depends_on:
+      - kafka
+    user: clickhouse:clickhouse
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./users.xml:/etc/clickhouse-server/users.d/custom_users.xml
+
+  clickhouse-ui:
+    image: dbeaver/cloudbeaver:latest
+    container_name: clickhouse-ui
+    restart: always
+    depends_on:
+      - clickhouse
+    ports:
+      - "8081:8978"  # UI для ClickHouse
+
+  prime-generator:
+    build:
+      context: ./service
+      dockerfile: Dockerfile
+    container_name: prime-generator
+    restart: always
+    depends_on:
+      - kafka
+      - clickhouse
+    environment:
+      AppSettings:KafkaBootstrapServers: kafka:9092
+      AppSettings:KafkaTopic": primes
+      AppSettings:Nickname": alfn
+    command: ["dotnet", "AlfasTestTask.dll"]
+
+volumes:
+  clickhouse_data:
+  kafka_data:
