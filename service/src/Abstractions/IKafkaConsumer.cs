@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace AlfasTestTask.Abstractions;
+﻿namespace AlfasTestTask.Abstractions;
 
 /// <summary>
 /// Сервис для чтения последнего отправленного простого числа из Kafka

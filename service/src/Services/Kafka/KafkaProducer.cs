@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using AlfasTestTask.Abstractions;
+﻿using AlfasTestTask.Abstractions;
 using AlfasTestTask.Services.Kafka.Models;
 using AlfasTestTask.Settings;
 using Confluent.Kafka;

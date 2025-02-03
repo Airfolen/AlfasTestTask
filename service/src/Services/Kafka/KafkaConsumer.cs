@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AlfasTestTask.Abstractions;
+﻿using AlfasTestTask.Abstractions;
 using AlfasTestTask.Services.Kafka.Models;
 using AlfasTestTask.Settings;
 using Confluent.Kafka;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
